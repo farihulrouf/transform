@@ -1,0 +1,22 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encoding</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Text Encoding</h1>
+    <form action="/encode" method="post">
+        <label for="transform">Transforms:</label><br>
+        <input type="text" id="transform" name="transform" required><br><br>
+        <label for="textFile">Text File:</label><br>
+        <input type="file" id="textFile" name="textFile" required><br><br>
+        <button type="submit">Encode</button>
+    </form>
+    <div id="output"></div>
+    <script src="script.js"></script>
+</body>
+</html>
