@@ -1,4 +1,13 @@
+const express = require('express');
+const path = require('path');
 const fs = require('fs');
+const app = express();
+const port = 3000;
+const bodyParser = require('body-parser');
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Define the initial keyboard layout
 const keyboard = [
@@ -71,18 +80,23 @@ function applyTransformations(text, transformations) {
     return transformedText;
 }
 
-// Read the transformations and text file
-let transformations;
-try {
-    transformations = fs.readFileSync('transformations.txt', 'utf-8').trim().split(',');
-} catch (err) {
-    console.error("Error reading transformations file:", err.message);
-    process.exit(1);
-}
-const text = fs.readFileSync('text.txt', 'utf-8');
+// POST method route
+app.post('/encode', (req, res) => {
+    let transform = [];
+    if (req.body.transform) {
+        transform = req.body.transform.split(',');
+    }
+    const textFilePath = path.join(__dirname, 'text', 'input.txt');
+    try {
+        const file = fs.readFileSync(textFilePath, 'utf-8');
+        const transformedText = applyTransformations(file, transform);
+        res.send(transformedText);
+    } catch (err) {
+        res.status(500).send("Error: Text file not found.");
+    }
+});
 
-// Apply transformations to the text
-const transformedText = applyTransformations(text, transformations);
-
-// Print the transformed text
-console.log(transformedText);
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is listening at http://localhost:${port}`);
+});
