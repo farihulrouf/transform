@@ -9,9 +9,13 @@
     </head>
 <body>
     <h1>Transformations</h1>
-    <form action="/encode" method="POST">
+    <form action="/encode" method="POST" enctype="multipart/form-data">
         <label for="transform">Transformations:</label><br>
         <input type="text" id="transform" name="transform" placeholder="Enter transformations">
+        <br><br>
+        <label for="file">Choose a file:</label>
+        <input type="file" id="file" name="file">
+        <br><br>
         <button type="submit">Apply Transformations</button>
     </form>
 </body>

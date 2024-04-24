@@ -1,13 +1,16 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+
 const app = express();
 const port = 3000;
-const bodyParser = require('body-parser');
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: true }));
+
+// Set up multer for file uploads
+const upload = multer({ dest: 'uploads/' });
 
 // Define the initial keyboard layout
 const keyboard = [
@@ -81,12 +84,15 @@ function applyTransformations(text, transformations) {
 }
 
 // POST method route
-app.post('/encode', (req, res) => {
+app.post('/encode', upload.single('file'), (req, res) => {
     let transform = [];
     if (req.body.transform) {
         transform = req.body.transform.split(',');
     }
-    const textFilePath = path.join(__dirname, 'text', 'input.txt');
+    if (!req.file) {
+        return res.status(400).send('No files were uploaded.');
+    }
+    const textFilePath = req.file.path;
     try {
         const file = fs.readFileSync(textFilePath, 'utf-8');
         const transformedText = applyTransformations(file, transform);
