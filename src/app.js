@@ -4,9 +4,11 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const port = 3000;
+const bodyParser = require('body-parser');
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Encoding function
 function applyTransforms(text, transforms) {
@@ -90,8 +92,8 @@ function shiftKeyboard(keyboard, n) {
 
 // POST method route
 app.post('/encode', (req, res) => {
-    const textFilePath = path.join(__dirname, '../text/input.txt');
     const transform = req.body.transform.split(',');
+    const textFilePath = path.join(__dirname, '../text/input.txt');
     const file = fs.readFileSync(textFilePath, 'utf-8');
     const transformedText = applyTransforms(file, transform);
     res.send(transformedText);
