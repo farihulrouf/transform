@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>Text Encoding</h1>
-    <form action="/encode" method="post">
+    <form id="encodingForm" action="/encode" method="post" enctype="multipart/form-data">
         <label for="transform">Transforms:</label><br>
         <input type="text" id="transform" name="transform" required><br><br>
         <label for="textFile">Text File:</label><br>

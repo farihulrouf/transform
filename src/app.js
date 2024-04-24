@@ -92,11 +92,18 @@ function shiftKeyboard(keyboard, n) {
 
 // POST method route
 app.post('/encode', (req, res) => {
-    const transform = req.body.transform.split(',');
+    let transform = [];
+    if (req.body.transform) {
+        transform = req.body.transform.split(',');
+    }
     const textFilePath = path.join(__dirname, '../text/input.txt');
-    const file = fs.readFileSync(textFilePath, 'utf-8');
-    const transformedText = applyTransforms(file, transform);
-    res.send(transformedText);
+    try {
+        const file = fs.readFileSync(textFilePath, 'utf-8');
+        const transformedText = applyTransforms(file, transform);
+        res.send(transformedText);
+    } catch (err) {
+        res.status(500).send("Error: Text file not found.");
+    }
 });
 
 // Start the server
